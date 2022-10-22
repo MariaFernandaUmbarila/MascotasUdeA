@@ -1,5 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:flutter/material.dart';
+import 'package:mascotas/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: "Usuer",
+                    labelText: "User",
                     border: OutlineInputBorder(),
                     suffixIcon: Icon(Icons.person)
                   ),
@@ -37,12 +38,29 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 20),
                 TextFormField(
                   obscureText: true,
+                  keyboardType: TextInputType.phone,
+                  maxLength: 16,
                   decoration: const InputDecoration(
                       labelText: "Password",
                       border: OutlineInputBorder(),
                       suffixIcon: Icon(Icons.vpn_key_sharp)
                   ),
                 ),
+                SizedBox(height: 20),
+                TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(fontSize: 20, color: Colors.teal)
+                    ),
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                    },
+                    child: const Text("Register")
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                    onPressed: (){},
+                    child: const Text("Login")
+                )
               ],
             ),
           ),
