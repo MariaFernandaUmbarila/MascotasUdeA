@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 TextFormField(
                   controller: password,
                   obscureText: true,
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.text,
                   maxLength: 16,
                   decoration: const InputDecoration(
                       labelText: "Password",
