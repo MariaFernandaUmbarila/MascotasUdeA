@@ -1,7 +1,7 @@
-// ignore_for_file: sort_child_properties_last, constant_identifier_names
-import 'dart:js_util';
-
+// ignore_for_file: sort_child_properties_last, constant_identifier_names, non_constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:mascotas/pages/login_page.dart';
+import 'package:mascotas/repository/user_register.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -22,6 +22,13 @@ class _RegisterPageState extends State<RegisterPage> {
   final password = TextEditingController();
   final passwordCon = TextEditingController();
   Gender? _gender = Gender.Female;
+
+  User_Register user_register = User_Register();
+
+  void saveUser() async{
+    bool result = await user_register.registerUser(email.text, password.text);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +147,22 @@ class _RegisterPageState extends State<RegisterPage> {
                       groupValue: _gender,
                       onChanged: (Gender? value){setState(() {_gender = value;});},
                     ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          fixedSize: const Size(200, 50),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)
+                          ),
+                          shadowColor: Colors.black12,
+                          textStyle: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontSize: 20
+                          )
+                      ),
+                      onPressed: (){saveUser();},
+                      child: const Text("Register")
                   )
                 ],
               ),
