@@ -1,8 +1,8 @@
 // ignore_for_file: sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:mascotas/pages/register_page.dart';
-
-import 'home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mascotas/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,16 +15,33 @@ class _LoginPageState extends State<LoginPage> {
 
   final email = TextEditingController();
   final password = TextEditingController();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-  void validUser(){
+  void validUserNoDB(){
     if(email.text.isNotEmpty && password.text.isNotEmpty){
       if (email.text == "test@gmail.com" && password.text == "1234") {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
-      } else {
+      }else {
         showMessage("Incorrect data");
       }
     }else{
       showMessage("All data is required");
+    }
+  }
+
+  void validUser() async{
+    try {
+      if(email.text.isNotEmpty && password.text.isNotEmpty){
+        final user = await auth.signInWithEmailAndPassword(email: email.text, password: password.text);
+        if(user != null){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+        }
+      }
+      else{
+        showMessage("All data is required");
+      }
+    }catch (e){
+      showMessage("Access denied" + e.toString());
     }
   }
 
@@ -62,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextFormField(
                   controller: email,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),

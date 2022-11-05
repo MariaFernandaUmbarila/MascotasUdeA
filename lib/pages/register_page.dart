@@ -1,4 +1,6 @@
 // ignore_for_file: sort_child_properties_last, constant_identifier_names
+import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -12,6 +14,13 @@ enum Gender{Female, Male}
 
 class _RegisterPageState extends State<RegisterPage> {
 
+  final name = TextEditingController();
+  final surname = TextEditingController();
+  final phone = TextEditingController();
+  final address = TextEditingController();
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final passwordCon = TextEditingController();
   Gender? _gender = Gender.Female;
 
   @override
@@ -44,6 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   TextFormField(
+                    controller: name,
                     keyboardType: TextInputType.name,
                     decoration: const InputDecoration(
                         labelText: "Name",
@@ -53,6 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
+                    controller: surname,
                     keyboardType: TextInputType.name,
                     decoration: const InputDecoration(
                         labelText: "Surname",
@@ -62,6 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
+                    controller: email,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                         labelText: "Email",
@@ -71,6 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
+                    controller: phone,
                     keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(
                         labelText: "Phone number",
@@ -80,6 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
+                    controller: address,
                     keyboardType: TextInputType.streetAddress,
                     decoration: const InputDecoration(
                         labelText: "Address",
@@ -88,6 +102,29 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  TextFormField(
+                    controller: password,
+                    obscureText: true,
+                    keyboardType: TextInputType.text,
+                    maxLength: 16,
+                    decoration: const InputDecoration(
+                        labelText: "Password",
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.vpn_key_sharp, color: Colors.orange, size: 24)
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: passwordCon,
+                    obscureText: true,
+                    keyboardType: TextInputType.text,
+                    maxLength: 16,
+                    decoration: const InputDecoration(
+                        labelText: "Password confirmation",
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.vpn_key_sharp, color: Colors.orange, size: 24)
+                    ),
+                  ),
                   ListTile(
                     title: const Text("Female"),
                     leading: Radio<Gender>(
