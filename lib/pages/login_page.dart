@@ -31,17 +31,24 @@ class _LoginPageState extends State<LoginPage> {
 
   void validUser() async{
     try {
-      if(email.text.isNotEmpty && password.text.isNotEmpty){
-        final user = await auth.signInWithEmailAndPassword(email: email.text, password: password.text);
-        if(user != null){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
-        }
+      final user = await auth.signInWithEmailAndPassword(email: email.text, password: password.text);
+      if(user != null){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
       }
-      else{
-        showMessage("All data is required");
+    }on FirebaseAuthException catch(e){
+      if(e.code == "invalid-user"){
+        showMessage("The email format is not correct");
       }
-    }catch (e){
-      showMessage("Access denied" + e.toString());
+      if(e.code == "user-not-found"){
+        showMessage("The user does not exist");
+      }
+      if(e.code == "wrong-password"){
+        showMessage("Wrong password");
+      }
+      if(e.code == "unknown"){
+        showMessage("Complete all the data");
+      }
+      //20:02
     }
   }
 
