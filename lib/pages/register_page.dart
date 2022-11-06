@@ -1,5 +1,6 @@
 // ignore_for_file: sort_child_properties_last, constant_identifier_names, non_constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:mascotas/model/user_model.dart';
 import 'package:mascotas/pages/login_page.dart';
 import 'package:mascotas/repository/user_register.dart';
 
@@ -23,10 +24,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordCon = TextEditingController();
   Gender? _gender = Gender.Female;
 
-  late final Message msg;
+  late Message msg;
   UserRegister user_register = UserRegister();
 
-  void saveUser() async{
+  void saveUser(User newUser) async{
     String? result = await user_register.registerUser(email.text, password.text);
 
     if(result == "invalid-email"){
@@ -38,9 +39,39 @@ class _RegisterPageState extends State<RegisterPage> {
     }else if(result == "network-request-failed"){
       msg.showMessage("There is not Internet connection");
     }else{
+      newUser.id = result;
+      registerUserId(newUser);
       msg.showMessage("User register successful");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
     }
+  }
+
+  void registerUserId(User newUser) async{
+    var id = await user_register.createUser(newUser);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+  }
+
+
+  void bringData(){
+    setState(() {
+
+      bool formNotEmpty = name.text.isNotEmpty && email.text.isNotEmpty && password.text.isNotEmpty &&
+      surname.text.isNotEmpty && phone.text.isNotEmpty && address.text.isNotEmpty && passwordCon.text.isNotEmpty;
+
+      if(password.text == passwordCon.text){
+        if(formNotEmpty){
+          String newGender = "Female";
+          if(_gender == Gender.Male){
+            newGender = "Male";
+          }
+          var newUser = User(" ", name.text, surname.text, email.text, phone.text, address.text, newGender, password.text);
+          saveUser(newUser);
+        }else{
+          msg.showMessage("There is missing data to be filled");
+        }
+      }else{
+        msg.showMessage("Passwords are not equal");
+      }
+    });
   }
 
   @override
@@ -175,7 +206,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               fontSize: 20
                           )
                       ),
-                      onPressed: (){saveUser();},
+                      onPressed: (){bringData();},
                       child: const Text("Register")
                   )
                 ],

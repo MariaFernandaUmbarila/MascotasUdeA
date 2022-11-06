@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final email = TextEditingController();
   final password = TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
-  late final Message msg;
+  late Message msg;
 
   void validUserNoDB(){
     if(email.text.isNotEmpty && password.text.isNotEmpty){

@@ -11,7 +11,7 @@ class User{
 
   User(this._id, this._names, this._surnames, this._email, this._phone, this._address, this._gender, this._password);
 
-  User.fromJson(Map < String, dynamic > data):
+  User.fromJson(Map<String, dynamic> data):
       _id = data['id'],
       _names = data['Names'],
       _surnames = data['Surnames'],
@@ -20,6 +20,17 @@ class User{
       _address = data['Address'],
       _gender = data['Gender'],
       _password = data['Password'];
+
+  Map<String, dynamic> convert() => {
+    'id': _id,
+    'names': _names,
+    'surnames': -_surnames,
+    'email': _email,
+    'phone': _phone,
+    'address': _address,
+    'gender': _gender,
+    'password': _password
+  };
 
   get password => _password;
 
