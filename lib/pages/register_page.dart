@@ -23,15 +23,29 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordCon = TextEditingController();
   Gender? _gender = Gender.Female;
 
-  User_Register user_register = User_Register();
+  late final Message msg;
+  UserRegister user_register = UserRegister();
 
   void saveUser() async{
-    bool result = await user_register.registerUser(email.text, password.text);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+    String? result = await user_register.registerUser(email.text, password.text);
+
+    if(result == "invalid-email"){
+      msg.showMessage("The email format is not correct");
+    }else if(result == "weak-password"){
+      msg.showMessage("Password has to be longer than six characters");
+    }else if(result == "unknown"){
+      msg.showMessage("Complete all the data");
+    }else if(result == "network-request-failed"){
+      msg.showMessage("There is not Internet connection");
+    }else{
+      msg.showMessage("User register successful");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    msg = Message(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(

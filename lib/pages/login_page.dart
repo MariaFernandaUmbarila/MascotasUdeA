@@ -16,16 +16,17 @@ class _LoginPageState extends State<LoginPage> {
   final email = TextEditingController();
   final password = TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
+  late final Message msg;
 
   void validUserNoDB(){
     if(email.text.isNotEmpty && password.text.isNotEmpty){
       if (email.text == "test@gmail.com" && password.text == "1234") {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
       }else {
-        showMessage("Incorrect data");
+        msg.showMessage("Incorrect data");
       }
     }else{
-      showMessage("All data is required");
+      msg.showMessage("All data is required");
     }
   }
 
@@ -33,41 +34,31 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final user = await auth.signInWithEmailAndPassword(email: email.text, password: password.text);
       if(user != null){
+        msg.showMessage("Welcome");
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
       }
     }on FirebaseAuthException catch(e){
-      if(e.code == "invalid-user"){
-        showMessage("The email format is not correct");
+      if(e.code == "invalid-email"){
+        msg.showMessage("The email format is not correct");
       }
       if(e.code == "user-not-found"){
-        showMessage("The user does not exist");
+        msg.showMessage("The user does not exist");
       }
       if(e.code == "wrong-password"){
-        showMessage("Wrong password");
+        msg.showMessage("Wrong password");
       }
       if(e.code == "unknown"){
-        showMessage("Complete all the data");
+        msg.showMessage("Complete all the data");
       }
-      //20:02
+      if(e.code == "network-request-failed"){
+        msg.showMessage("There is not Internet connection");
+      }
     }
-  }
-
-  void showMessage(String msg){
-    final screen = ScaffoldMessenger.of(context);
-    screen.showSnackBar(SnackBar(
-        content: Text(msg, style: const TextStyle(fontSize: 18)),
-        backgroundColor: const Color(0xFFFF9800),
-        duration: const Duration(seconds: 7),
-        action: SnackBarAction(
-          label: "OK",
-          onPressed: screen.hideCurrentSnackBar,
-        ),
-      )
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    msg = Message(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -136,6 +127,26 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Message{
+
+  late BuildContext context;
+  Message(this.context);
+
+  void showMessage(String msg){
+    final screen = ScaffoldMessenger.of(context);
+    screen.showSnackBar(SnackBar(
+      content: Text(msg, style: const TextStyle(fontSize: 18)),
+      backgroundColor: const Color(0xFFFF9800),
+      duration: const Duration(seconds: 7),
+      action: SnackBarAction(
+        label: "OK",
+        onPressed: screen.hideCurrentSnackBar,
+      ),
+    )
     );
   }
 }
