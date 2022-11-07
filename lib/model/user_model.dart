@@ -24,7 +24,7 @@ class User{
   Map<String, dynamic> convert() => {
     'id': _id,
     'names': _names,
-    'surnames': -_surnames,
+    'surnames': _surnames,
     'email': _email,
     'phone': _phone,
     'address': _address,
