@@ -1,5 +1,10 @@
 // ignore_for_file: constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:mascotas/model/pet_model.dart';
+import 'package:mascotas/pages/home_page.dart';
+import 'package:mascotas/pages/login_page.dart';
+import 'package:mascotas/pages/menu_page.dart';
+import 'package:mascotas/repository/pet_register.dart';
 
 class RegisterPetPage extends StatefulWidget {
   const RegisterPetPage({Key? key}) : super(key: key);
@@ -18,15 +23,43 @@ class _RegisterPetPageState extends State<RegisterPetPage> {
   final age = TextEditingController();
   Gender? _gender = Gender.Female;
 
+  late Message msg;
+  PetRegister petRegister = PetRegister();
+
+  void savePet(Pet newPet) async{
+    var id = await petRegister.registerPet(newPet);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+  }
+
+  void bringData(){
+    setState(() {
+      String photo = "gs://desarrollomovil-f5db0.appspot.com/img_pets/michi.png";
+      bool formNotEmpty = name.text.isNotEmpty && type.text.isNotEmpty && breed.text.isNotEmpty
+      && age.text.isNotEmpty;
+
+      if(formNotEmpty){
+        String newGender = "Female";
+        if(_gender == Gender.Male){
+          newGender = "Male";
+        }
+        var newPet = Pet("", name.text, type.text, breed.text, age.text, newGender, photo);
+        savePet(newPet);
+      }else{
+        msg.showMessage("There is missing data to be filled");
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    msg = Message(context);
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage("assets/background.jpg"), fit: BoxFit.cover)
-        ),
-        child: Padding(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("Register pet"),
+      ),
+      drawer: MenuPage(),
+      body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 50),
           child: SingleChildScrollView(
             child: Center(
@@ -101,7 +134,7 @@ class _RegisterPetPageState extends State<RegisterPetPage> {
                               fontSize: 20
                           )
                       ),
-                      onPressed: (){},
+                      onPressed: (){bringData();},
                       child: const Text("Register")
                   )
                 ],
@@ -109,7 +142,6 @@ class _RegisterPetPageState extends State<RegisterPetPage> {
             ),
           ),
         ),
-      ),
     );
   }
 }

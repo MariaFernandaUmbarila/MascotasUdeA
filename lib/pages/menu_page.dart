@@ -12,9 +12,7 @@ class MenuPage extends StatelessWidget {
       child: ListView(
         children: [
           DrawerHeader(
-              decoration: const BoxDecoration(
-                  color: Colors.green
-              ),
+              decoration: const BoxDecoration(color: Color(0x4C75D0D6)),
               child: Image.network(url)
           ),
           Column(

@@ -1,25 +1,19 @@
 class User{
 
-  var _id;
-  var _names;
-  var _surnames;
-  var _email;
-  var _phone;
-  var _address;
-  var _gender;
-  var _password;
+  var _id, _names, _surnames, _email;
+  var _phone, _address, _gender, _password;
 
   User(this._id, this._names, this._surnames, this._email, this._phone, this._address, this._gender, this._password);
 
   User.fromJson(Map<String, dynamic> data):
       _id = data['id'],
-      _names = data['Names'],
-      _surnames = data['Surnames'],
-      _email = data['Email'],
-      _phone = data['Phone'],
-      _address = data['Address'],
-      _gender = data['Gender'],
-      _password = data['Password'];
+      _names = data['names'],
+      _surnames = data['surnames'],
+      _email = data['email'],
+      _phone = data['phone'],
+      _address = data['address'],
+      _gender = data['gender'],
+      _password = data['password'];
 
   Map<String, dynamic> convert() => {
     'id': _id,
