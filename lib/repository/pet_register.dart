@@ -8,7 +8,7 @@ class PetRegister{
       final uid = FirebaseAuth.instance.currentUser?.uid;
       final petDocument = await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").doc();
       pet.id = petDocument;
-      final result = await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").doc(pet.id).set(pet.convert());
+      final result = await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").doc().set(pet.convert());
       return pet.id;
     }on FirebaseAuthException catch(e){
       return e.code;
