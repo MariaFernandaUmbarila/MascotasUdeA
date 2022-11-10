@@ -81,27 +81,27 @@ class _RegisterPetPageState extends State<RegisterPetPage> {
                     decoration: const InputDecoration(
                         labelText: "Type",
                         border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.person, color: Colors.orange, size: 24)
+                        suffixIcon: Icon(Icons.type_specimen, color: Colors.orange, size: 24)
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: breed,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.name,
                     decoration: const InputDecoration(
                         labelText: "Breed",
                         border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.email, color: Colors.orange, size: 24)
+                        suffixIcon: Icon(Icons.scatter_plot_sharp, color: Colors.orange, size: 24)
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: age,
-                    keyboardType: TextInputType.phone,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                         labelText: "Age",
                         border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.phone, color: Colors.orange, size: 24)
+                        suffixIcon: Icon(Icons.calendar_today, color: Colors.orange, size: 24)
                     ),
                   ),
                   const SizedBox(height: 20),
