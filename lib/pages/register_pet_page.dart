@@ -27,13 +27,18 @@ class _RegisterPetPageState extends State<RegisterPetPage> {
   PetRegister petRegister = PetRegister();
 
   void savePet(Pet newPet) async{
-    var id = await petRegister.registerPet(newPet);
+    var result = await petRegister.registerPet(newPet);
+    if(result == "Pet already exists"){
+      msg.showMessage("Pet already exists");
+    }else {
+      msg.showMessage("Pet register was successful");
+    }
     Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 
   void bringData(){
     setState(() {
-      String photo = "gs://desarrollomovil-f5db0.appspot.com/img_pets/michi.png";
+      String photo = "https://firebasestorage.googleapis.com/v0/b/desarrollomovil-f5db0.appspot.com/o/img_pets%2Fmichi.png?alt=media&token=fcd73687-0174-4946-8de2-8b856144aee4";
       bool formNotEmpty = name.text.isNotEmpty && type.text.isNotEmpty && breed.text.isNotEmpty
       && age.text.isNotEmpty;
 

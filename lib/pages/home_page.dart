@@ -33,3 +33,35 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+class myCardImage extends StatelessWidget {
+
+  final String url;
+  final String texto;
+
+  const myCardImage(this.url, this.texto, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      margin: const EdgeInsets.all(20),
+      elevation: 20,
+      color: const Color(0x4C75D0D6);
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(40),
+        child: Column(
+          children: [
+            Image.network(url,width: MediaQuery.of(context).size.width,height: 250,),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(5),
+              color: Colors.lightGreenAccent,
+              child: Text(texto, style: const TextStyle(fontSize: 20, color: Colors.white)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

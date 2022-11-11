@@ -7,10 +7,17 @@ class PetRegister{
   Future<String?> registerPet(Pet pet) async{
     try{
       final uid = FirebaseAuth.instance.currentUser?.uid;
-      final petDocument = await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").doc();
-      pet.id = petDocument.id;
-      final result = await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").doc(pet.id).set(pet.convert());
-      return pet.id;
+
+      QuerySnapshot petName= await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").where("name", isEqualTo: pet.name).get();
+
+      if (petName.docs.isEmpty){
+        final petDocument = await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").doc();
+        pet.id = petDocument.id;
+        final result = await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").doc(pet.id).set(pet.convert());
+        return pet.id;
+      }else{
+        return  "Pet already exists";
+      }
     }on FirebaseAuthException catch(e){
       return e.code;
     }on FirebaseException catch(e){
