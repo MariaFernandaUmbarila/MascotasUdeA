@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
       if(pet.docs.isNotEmpty){
         for(var i in pet.docs){
           pets.add(i.data());
+          print("---------------------------------------------------->>>>>>>>>>>>>>>>>>><<< " + i.data().toString());
         }
       }
     });
@@ -42,9 +43,9 @@ class _HomePageState extends State<HomePage> {
       drawer: MenuPage(),
       body: ListView.builder(
         itemCount: pets.length,
-        itemBuilder: (BuildContext context, i ){
+        itemBuilder: (BuildContext context, i){
           return ListTile(
-            title: MyCardImage(pets[i]["photo"], pets[i]["name"] + pets[i]["breed"] + pets[i]["race"])
+            title: MyCardImage(pets[i]["photo"], pets[i]["name"] + ' - '+ pets[i]["type"] + ' - ' + pets[i]["breed"])
           );
         },
       ),
