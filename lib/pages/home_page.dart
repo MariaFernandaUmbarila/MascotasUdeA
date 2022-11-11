@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mascotas/pages/menu_page.dart';
@@ -11,6 +12,27 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage> {
+
+  List pets = [];
+
+  @override
+  void initState(){
+    super.initState();
+    getPets();
+  }
+
+  Future getPets() async{
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    QuerySnapshot pet = await FirebaseFirestore.instance.collection("Usuarios").doc(uid).collection("mascotas").get();
+    setState(() {
+      if(pet.docs.isNotEmpty){
+        for(var i in pet.docs){
+          pets.add(i.data());
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,13 +40,13 @@ class _HomePageState extends State<HomePage> {
         title: const Text("PETS"),
       ),
       drawer: MenuPage(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("Hi, ${FirebaseAuth.instance.currentUser?.email}")
-          ],
-        ),
+      body: ListView.builder(
+        itemCount: pets.length,
+        itemBuilder: (BuildContext context, i ){
+          return ListTile(
+            title: MyCardImage(pets[i]["photo"], pets[i]["name"] + pets[i]["breed"] + pets[i]["race"])
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add, size: 30, color: Colors.black),
@@ -34,12 +56,12 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class myCardImage extends StatelessWidget {
+class MyCardImage extends StatelessWidget {
 
   final String url;
-  final String texto;
+  final String text;
 
-  const myCardImage(this.url, this.texto, {super.key});
+  const MyCardImage(this.url, this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +69,17 @@ class myCardImage extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       margin: const EdgeInsets.all(20),
       elevation: 20,
-      color: const Color(0x4C75D0D6);
+      color: const Color(0x4C75D0D6),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(40),
         child: Column(
           children: [
-            Image.network(url,width: MediaQuery.of(context).size.width,height: 250,),
+            Image.network(url, width: MediaQuery.of(context).size.width, height: 250,),
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(5),
-              color: Colors.lightGreenAccent,
-              child: Text(texto, style: const TextStyle(fontSize: 20, color: Colors.white)),
+              color: const Color(0x4C75D0D6),
+              child: Text(text, style: const TextStyle(fontSize: 20, color: Colors.black)),
             )
           ],
         ),
