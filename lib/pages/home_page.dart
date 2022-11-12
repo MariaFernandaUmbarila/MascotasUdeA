@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mascotas/pages/menu_page.dart';
 import 'package:mascotas/pages/register_pet_page.dart';
+import 'package:mascotas/pages/walkers_page.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key: key);
@@ -28,7 +29,6 @@ class _HomePageState extends State<HomePage> {
       if(pet.docs.isNotEmpty){
         for(var i in pet.docs){
           pets.add(i.data());
-          print("---------------------------------------------------->>>>>>>>>>>>>>>>>>><<< " + i.data().toString());
         }
       }
     });
@@ -39,6 +39,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("PETS"),
+        actions: [
+          IconButton(
+              onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => WalkersPage()));},
+              icon: const Icon(Icons.person, size: 30, color: Colors.white)
+          )
+        ],
       ),
       drawer: MenuPage(),
       body: ListView.builder(
