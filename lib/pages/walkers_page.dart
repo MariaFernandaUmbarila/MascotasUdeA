@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mascotas/pages/home_page.dart';
 import 'package:mascotas/pages/menu_page.dart';
 import 'package:mascotas/pages/walker_detail_page.dart';
 
@@ -14,6 +13,7 @@ class WalkersPage extends StatefulWidget{
 class _WalkersPageState extends State<WalkersPage> {
 
   List walkers = [], idDocs = [];
+  final search = TextEditingController();
 
   @override
   void initState(){
@@ -35,6 +35,23 @@ class _WalkersPageState extends State<WalkersPage> {
     });
   }
 
+  Future getCity() async{
+
+    idDocs.clear();
+    walkers.clear();
+    String id = "";
+    QuerySnapshot paseoCiudad= await FirebaseFirestore.instance.collection("Paseadores").where("ciudad", isEqualTo: search.text).get();
+    setState(() {
+      if(paseoCiudad.docs.isNotEmpty){
+        for(var i in paseoCiudad.docs){
+          id = i.id; //Trae el id
+          idDocs.add(id);
+          walkers.add(i.data());
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,18 +59,63 @@ class _WalkersPageState extends State<WalkersPage> {
         title: const Text("WALKERS")
       ),
       drawer: MenuPage(),
-      body: ListView.builder(
-        itemCount: walkers.length,
-        itemBuilder: (BuildContext context, i){
-          return ListTile(
-            title: MyCardImage(walkers[i]["foto"], walkers[i]["nombre"] + " - " + walkers[i]["ciudad"]),
-            onTap: (){
-              WalkerData newWalker = WalkerData(walkers[i]["nombre"], walkers[i]["ciudad"], walkers[i]["contacto"], walkers[i]["foto"], walkers[i]["perfil"], idDocs[i]);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => WalkerDetailPage(newWalker)));
-            },
-          );
-        },
-      ),
+      body:Stack(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 20, left: 50, right: 0),
+                    child: TextFormField(
+                      controller: search,
+                      keyboardType: TextInputType.name,
+                      decoration: const InputDecoration(
+                        labelText: "City",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+              ),
+              IconButton(
+                  onPressed: (){setState(() {getCity();});},
+                  padding: const EdgeInsets.only(right: 50, left: 10),
+                  icon: const Icon(Icons.search, size: 50, color: Colors.white)
+              ),
+              const SizedBox(height: 30),
+              Padding(
+                  padding: const EdgeInsets.only(top: 100),
+                  child: Container(
+                    child: ListView.builder(
+                        itemBuilder: (BuildContext context, i){
+                          return Row(
+                            children: [
+                              Padding(
+                                  padding: const  EdgeInsets.all(10),
+                                  child: CircleAvatar(
+                                    backgroundImage: NetworkImage(walkers[i]['foto']),
+                                    radius: 50,
+                                  )
+                              ),
+                              Expanded(
+                                  child: ListTile(
+                                    title: Text(walkers[i]["nombre"], style: const TextStyle(fontSize: 20, color: Colors.black, )),
+                                    subtitle: Text(walkers[i]["ciudad"]),
+                                    onTap: (){
+                                      WalkerData paseadorNew = WalkerData(idDocs[i], walkers[i]["nombre"], walkers[i]["ciudad"], walkers[i]["contacto"], walkers[i]["foto"], walkers[i]["perfil"]);
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> WalkerDetailPage(paseadorNew)));
+                                    },
+                                  )
+                              )
+                            ],
+                          );
+                        }
+                    ),
+                  ),
+              )
+            ],
+          )
+        ],
+      )
     );
   }
 }
