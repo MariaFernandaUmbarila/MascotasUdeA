@@ -12,7 +12,8 @@ class WalkersPage extends StatefulWidget{
 
 class _WalkersPageState extends State<WalkersPage> {
 
-  List walkers = [], idDocs = [];
+  List walkers = [];
+  List<dynamic> idDocs = [];
   final search = TextEditingController();
 
   @override
@@ -59,7 +60,7 @@ class _WalkersPageState extends State<WalkersPage> {
         title: const Text("WALKERS")
       ),
       drawer: MenuPage(),
-      body:Stack(
+      body: Stack(
         children: [
           Row(
             children: [
@@ -81,38 +82,40 @@ class _WalkersPageState extends State<WalkersPage> {
                   padding: const EdgeInsets.only(right: 50, left: 10),
                   icon: const Icon(Icons.search, size: 50, color: Colors.white)
               ),
-              const SizedBox(height: 30),
-              Padding(
-                  padding: const EdgeInsets.only(top: 100),
-                  child: Container(
-                    child: ListView.builder(
-                        itemBuilder: (BuildContext context, i){
-                          return Row(
-                            children: [
-                              Padding(
-                                  padding: const  EdgeInsets.all(10),
-                                  child: CircleAvatar(
-                                    backgroundImage: NetworkImage(walkers[i]['foto']),
-                                    radius: 50,
-                                  )
-                              ),
-                              Expanded(
-                                  child: ListTile(
-                                    title: Text(walkers[i]["nombre"], style: const TextStyle(fontSize: 20, color: Colors.black, )),
-                                    subtitle: Text(walkers[i]["ciudad"]),
-                                    onTap: (){
-                                      WalkerData paseadorNew = WalkerData(idDocs[i], walkers[i]["nombre"], walkers[i]["ciudad"], walkers[i]["contacto"], walkers[i]["foto"], walkers[i]["perfil"]);
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> WalkerDetailPage(paseadorNew)));
-                                    },
-                                  )
-                              )
-                            ],
-                          );
-                        }
-                    ),
-                  ),
-              )
             ],
+          ),
+          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.only(top: 100),
+            child: Container(
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(10),
+                  itemCount: walkers.length,
+                  itemBuilder: (BuildContext context, i){
+                    return Row(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(walkers[i]['foto']),
+                              radius: 50,
+                            )
+                        ),
+                        Expanded(
+                            child: ListTile(
+                              title: Text(walkers[i]["nombre"], style: const TextStyle(fontSize: 20, color: Colors.black, )),
+                              subtitle: Text(walkers[i]["ciudad"]),
+                              onTap: (){
+                                WalkerData paseadorNew = WalkerData(idDocs[i], walkers[i]["nombre"], walkers[i]["ciudad"], walkers[i]["contacto"], walkers[i]["foto"], walkers[i]["perfil"]);
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> WalkerDetailPage(paseadorNew)));
+                              },
+                            )
+                        )
+                      ],
+                    );
+                  }
+              ),
+            ),
           )
         ],
       )
